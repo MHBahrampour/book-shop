@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Books in <strong>{{ this_genre.name }}</strong> genre:</h1>
+  {% if genre_books_list %}
+  <ul>
+    {% for book in genre_books_list %}
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no books in this genre in the shop.</p>
+  {% endif %}
+{% endblock %}
