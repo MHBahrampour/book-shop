@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.views import generic
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
@@ -13,16 +13,21 @@ def index(request):
   num_instances_available = Book.objects.filter(is_available__exact=True).count()
   num_authors = Author.objects.count()
 
-  test = Book.objects.get(title='Dune')
-
   context = {
     'num_books': num_books,
     'num_instances_available': num_instances_available,
     'num_authors': num_authors,
-    'test': test,
   }
 
   return render(request, 'index.html', context)
+
+class SearchResultsView(generic.ListView):
+  model = Book
+  template_name = 'app/search_results.html'
+
+  def get_queryset(self):
+    query = self.request.GET.get('query')
+    return Book.objects.filter(title__icontains=query)
 
 
 class BookListView(generic.ListView):
@@ -57,6 +62,11 @@ def genreBooks(request, pk):
   }
 
   return render(request, 'app/genre_books.html', context)
+
+
+def addToCart(request, pk):
+
+  return HttpResponse(f"Book with ID={pk}")
 
 
 class Signup(generic.CreateView):

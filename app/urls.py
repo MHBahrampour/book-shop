@@ -15,5 +15,9 @@ urlpatterns = [
   path('genre/', views.GenreListView.as_view(), name='genre'),
   path('genre/<int:pk>', views.genreBooks, name='genre-books'),
 
+  path("search/", views.SearchResultsView.as_view(), name="search-results"),
+
+  path('book/<int:pk>/addToCart', views.addToCart, name='add_to_cart'),
+
   #path('profile/', views.profile, name='profile'),
 ]

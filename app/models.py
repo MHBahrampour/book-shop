@@ -26,9 +26,13 @@ class Book(models.Model):
   summary = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
   isbn = models.CharField('ISBN', max_length=13, unique=True, help_text='13 Character ISBN number')
 
+  cover = models.ImageField(upload_to='covers/', default='defaultCover.jpg')
+
   # ManyToManyField used because genre can contain many books. Books can cover many genres.
   # Genre class has already been defined so we can specify the object above.
   genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
+
+  price = models.CharField(max_length=3, default='N/A', help_text='Price in US Dollar')
 
   is_available = models.BooleanField(default=True)
 
@@ -43,10 +47,14 @@ class Book(models.Model):
 
 class Author(models.Model):
     """Model representing an author."""
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
+
+    portrait = models.ImageField(upload_to='portraits/', default='defaultPortrait.jpg')
 
     class Meta:
       ordering = ['last_name', 'first_name']
@@ -55,12 +63,9 @@ class Author(models.Model):
       """Returns the URL to access a particular author instance."""
       return reverse('author-detail', args=[str(self.id)])
 
-    def full_name(self):
-      return f'{self.last_name} {self.first_name}'
-
     def __str__(self):
       """String for representing the Model object."""
-      return f'{self.last_name}, {self.first_name}'
+      return f'{self.first_name} {self.last_name}'
 
 '''
 class Profile(models.Model):

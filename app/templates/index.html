@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  <form action="{% url 'search-results' %}" method="get">
+    <input type="text" name="query" id="input_query" placeholder="Search for books...">
+    <button type="submit">Search</button>
+  </form>
+
   <h1>Book Shop Home</h1>
   <p>The library has the following record counts:</p>
   <ul>
     <li><strong>Books:</strong> {{ num_books }}</li>
     <li><strong>Books available:</strong> {{ num_instances_available }}</li>
     <li><strong>Authors:</strong> {{ num_authors }}</li>
-    <li><strong>Genre:</strong> {{ test.genre }}</li>
   </ul>
+
 {% endblock %}
