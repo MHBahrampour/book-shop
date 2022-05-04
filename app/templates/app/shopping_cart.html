@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>Shopping Cart</h1>
+  
+  {% if shopping_cart %}
+
+    {% for book in shopping_cart.books.all %}
+
+      <img src="{{ book.cover.url }}" alt="book cover" style="width:100px">
+
+      <p>Title: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a><br>
+      Author: <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a><br>
+      Price: {{ book.price }}$<br>
+      <a href="{% url 'remove_from_shopping_cart' pk=book.id %}">Remove From Cart</a></p>
+      
+      <hr>
+
+    {% endfor %}
+
+    <p>Total Price: {{ total_price }}$</p>
+    <p><a href="{% url 'successful_purchase' %}">Purchase</a></p>
+
+  {% else %}
+    <p>You didn't add any book in your Shopping Cart yet.</p>
+    <p><a href="{% url 'books' %}">Add now</a></p>
+
+  {% endif %}
+
+{% endblock %}

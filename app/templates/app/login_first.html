@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h3>You need to login first.</h3>
+  <p><a href="{% url 'login' %}?next=/app/book/{{pk}}">Login</a> if you already have an account.</p>
+  <p><a href="{% url 'signup' %}?next=/app/book/{{pk}}">Signup</a> if you don't have an account.</p>
+{% endblock %}

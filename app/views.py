@@ -1,10 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from .models import Book, Author, Genre
+from .models import Book, Author, Genre, ShoppingCart
 
 
 def index(request):
@@ -20,6 +21,7 @@ def index(request):
   }
 
   return render(request, 'index.html', context)
+
 
 class SearchResultsView(generic.ListView):
   model = Book
@@ -53,8 +55,6 @@ class GenreListView(generic.ListView):
 def genreBooks(request, pk):
 
   genre_books_list = Book.objects.filter(genre__pk=pk).select_related()
-  for book in genre_books_list:
-    print(book.author)
 
   context = {
     'this_genre': Genre.objects.get(pk=pk),
@@ -64,9 +64,55 @@ def genreBooks(request, pk):
   return render(request, 'app/genre_books.html', context)
 
 
-def addToCart(request, pk):
+def showShoppingCart(request):
 
-  return HttpResponse(f"Book with ID={pk}")
+  shopping_cart = ShoppingCart.objects.get(user=request.user)
+
+  context = {}
+  if shopping_cart.books.all().count() > 0:
+
+    total_price = 0
+    for book in shopping_cart.books.all():
+      total_price += int(book.price)
+
+    context['shopping_cart'] = shopping_cart
+    context['total_price'] = total_price
+
+  return render(request, 'app/shopping_cart.html', context)
+
+def addToShoppingCart(request, pk):
+
+  book = Book.objects.get(pk=pk)
+
+  if not request.user.is_authenticated:
+    context = { 'pk': pk }
+    return render(request, 'app/login_first.html', context)
+    
+  try:
+    shopping_cart = ShoppingCart.objects.get(user=request.user)
+
+  except ShoppingCart.DoesNotExist:
+    shopping_cart = ShoppingCart()
+    shopping_cart.user = request.user
+    shopping_cart.save()
+    shopping_cart.books.add(book)
+
+  else:
+    shopping_cart.books.add(book)
+    
+  return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def removeFromShoppingCart(request, pk):
+
+  book = Book.objects.get(pk=pk)
+
+  shopping_cart = ShoppingCart.objects.get(user=request.user)
+  shopping_cart.books.remove(book)
+
+  return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def successfulPurchase(request):
+  return render(request, 'app/successful_purchase.html')
 
 
 class Signup(generic.CreateView):

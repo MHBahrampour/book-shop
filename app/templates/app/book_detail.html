@@ -4,11 +4,22 @@
 
   <h1>Title: {{ book.title }}</h1>
 
-  <p><strong>Author:</strong> <a href="">{{ book.author }}</a></p>
+  <img src="{{ book.cover.url }}" alt="book cover" style="width:200px">
+
+  <p><strong>Author:</strong> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></p>
   <p><strong>Summary:</strong> {{ book.summary }}</p>
   <p><strong>ISBN:</strong> {{ book.isbn }}</p>
   <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+  <p><strong>Price:</strong> {{ book.price }}$</p>
 
-  <p><a href="{% url 'add_to_cart' pk=book.id %}">Add To Cart</a></p>
+  <form action="{% url 'add_to_shopping_cart' pk=book.id %}">
+    <input type="submit" value="Add To Cart" onclick="sayAdded()">
+  </form>
+
+  <script>
+    function sayAdded() {
+      alert("Added to your Shopping Cart.");
+    }
+  </script>
 
 {% endblock %}
