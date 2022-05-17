@@ -1,15 +1,33 @@
 {% extends "base.html" %}
 
-{% block content %}
-  <h1>Author List</h1>
-  {% if author_list %}
-    {% for author in author_list %}
-      <img src="{{ author.portrait.url }}" alt="author protraite" style="width:100px">
-      <p>
-        <a href="{{ author.get_absolute_url }}">{{ author }}</a>
-      </p>
-    {% endfor %}
-  {% else %}
-    <p>There are no author in the shop.</p>
-  {% endif %}
-{% endblock %}
+  {% block title %}<title>List of all Authors</title>{% endblock %}
+
+  {% block content %}
+  <p class="title">All <b>authors</b> in the shop</p>
+    <div class="list-container">   
+        
+      {% if author_list %}
+
+        {% for author in author_list %}
+          <a href="{{ author.get_absolute_url }}" class="no-decoration">
+            <div class="list-item-container">
+
+              <img src="{{ author.portrait.url }}" alt="author portrait" class="center-img">
+
+              <p>
+                <span class="inline-icon"><i class="fa-solid fa-user"></i></span> 
+                {{ author }}
+              </p>
+
+            </div>
+          </a>
+        {% endfor %}
+
+      {% else %}
+        <p>There are no author registered in the shop.</p>
+
+      {% endif %}
+
+    </div>
+  {% endblock %}
+

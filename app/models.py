@@ -57,6 +57,8 @@ class Author(models.Model):
   date_of_birth = models.DateField()
   date_of_death = models.DateField(null=True)
 
+  biography = models.TextField(max_length=1000, help_text='Enter a brief biography of the author')
+
   portrait = models.ImageField(upload_to='portraits/', default='defaultPortrait.jpg')
 
   def __str__(self):

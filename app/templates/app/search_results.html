@@ -1,29 +1,47 @@
 {% extends "base.html" %}
 
+{% block title %}<title>Search results</title>{% endblock %}
+
 {% block content %}
+  <p class="title">Search results for <b>{{ request.GET.query }}</b></p>
+  
+  <div class="list-container">
+      
+    {% if book_list %}
 
-  <h1>Search Results</h1>
+      {% for book in book_list %}
+        <a href="{{ book.get_absolute_url }}" class="no-decoration">
+          <div class="list-item-container">
 
-  {% if book_list %}
+            <img src="{{ book.cover.url }}" alt="book cover" class="center-img">
 
-    {% for book in book_list %}
+            <p>
+              <span class="inline-icon"><i class="fa-solid fa-book"></i></span> 
+              {{ book.title }}
+            </p>
+            <p>
+              <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+              {{ book.author }}
+            </p>
+      
+            {% if book.is_available %}
+              <p>
+                <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+                {{ book.price }} &mdash; <span class="available">Available in stock</span>
+              </p>
+            {% else %}
+              <p class="not-available">Not available</p>
+            {% endif %}
+          
+          </div>
+        </a>
+      {% endfor %}
 
-      <img src="{{ book.cover.url }}" alt="book cover" style="width:100px">
+    {% else %}
+      <p>There are no books in the shop.</p>
 
-      <p>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> - {{ book.author }}
-        {% if book.is_available %}
-          [Available]
-        {% else %}
-          [Not Available]
-        {% endif %}
-      </p>
+    {% endif %}
 
-    {% endfor %}
-
-  {% else %}
-    <p>There are no books in the shop.</p>
-
-  {% endif %}
+  </div>
 
 {% endblock %}

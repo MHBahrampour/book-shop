@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Genre List</h1>
-  {% if genre_list %}
-  <ul>
-    {% for genre in genre_list %}
-      <li>
-        <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-    <p>There are no genre in the shop.</p>
-  {% endif %}
+
+  <p class="title">All <b>genres</b> in the shop</p>
+  
+  <div class="list-container">
+    {% if genre_list %}
+      {% for genre in genre_list %}
+        <a href="{{ genre.get_absolute_url }}" class="no-decoration">
+          <div class="list-item-container">
+            <p>{{ genre.name }}</p>
+          </div>
+        </a>
+      {% endfor %}
+
+    {% else %}
+      <p>There are no genre in the shop.</p>
+    {% endif %}
+  </div>
 {% endblock %}

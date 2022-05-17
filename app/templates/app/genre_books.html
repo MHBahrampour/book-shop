@@ -1,16 +1,46 @@
 {% extends "base.html" %}
 
-{% block content %}
-  <h1>Books in <strong>{{ this_genre.name }}</strong> genre:</h1>
-  {% if genre_books_list %}
-  <ul>
-    {% for book in genre_books_list %}
-      <li>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{ book.author }})
-      </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-    <p>There are no books in this genre in the shop.</p>
-  {% endif %}
-{% endblock %}
+  {% block title %}<title>All {{ this_genre }}'s books</title>{% endblock %}
+
+  {% block content %}
+    <p class="title">All <b>{{ this_genre }}'s</b> books</p>
+    <div class="list-container">   
+        
+      {% if genre_books_list %}
+
+        {% for book in genre_books_list %}
+          <a href="{{ book.get_absolute_url }}" class="no-decoration">
+            <div class="list-item-container">
+
+              <img src="{{ book.cover.url }}" alt="book cover" class="center-img">
+
+              <p>
+                <span class="inline-icon"><i class="fa-solid fa-book"></i></span> 
+                {{ book.title }}
+              </p>
+              <p>
+                <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+                {{ book.author }}
+              </p>
+        
+              {% if book.is_available %}
+                <p>
+                  <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+                  {{ book.price }} &mdash; <span class="available">Available in stock</span>
+                </p>
+              {% else %}
+                <p class="not-available">Not available</p>
+              {% endif %}
+            
+            </div>
+          </a>
+        {% endfor %}
+
+      {% else %}
+        <p>There are no books in {{ this_genre }} in the shop.</p>
+
+      {% endif %}
+
+    </div>
+  {% endblock %}
+

@@ -2,26 +2,104 @@
 
 {% block content %}
 
-  <h1>Title: {{ book.title }}</h1>
+  <!-- Detail of the Book -->
+  <div class="detail-container">
+    
+    <div class="detail-item-container">
 
-  <img src="{{ book.cover.url }}" alt="book cover" style="width:200px">
+      <img src="{{ book.cover.url }}" alt="Book Cover">
 
-  <p><strong>Author:</strong> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></p>
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-  <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
-  <p><strong>Price:</strong> {{ book.price }}$</p>
+      <div>
+        <h1><i class="fa-solid fa-book"></i> {{ book.title }}</h1>
 
-  <form action="{% url 'add_to_shopping_cart' pk=book.id %}">
-    <input type="submit" value="Add To Cart" onclick="sayAdded()">
-  </form>
+        <p>
+          <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+          <b>Author:</b> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a>
+        </p>
 
-  <script>
-    function sayAdded() {
-      alert("Added to your Shopping Cart.");
-    }
-  </script>
+        {% if book.genre.all.count > 1 %}
+          <p>
+            <span class="inline-icon"><i class="fa-solid fa-swatchbook"></i></span> 
+            <b>Genres:</b> {{ book.genre.all|join:", " }}
+          </p>
+        {% else %}
+          <p>
+            <span class="inline-icon"><i class="fa-solid fa-swatchbook"></i></span> 
+            <b>Genre:</b> {{ book.genre.all|join:", " }}
+          </p>
+        {% endif %}
+      
+        <p>
+          <span class="inline-icon"><i class="fa-solid fa-arrow-down-1-9"></i></span> 
+          <b>ISBN:</b> {{ book.isbn }}
+        </p>
+        <p>
+          <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+          <b>Price:</b> {{ book.price }}$
+        </p>
+
+        <form action="{% url 'add_to_shopping_cart' pk=book.id %}">
+          <input type="submit" value="Add to Shopping Cart" class="add-to-cart" onclick="sayAdded()">
+        </form>
+
+        <p>
+          <span class="inline-icon"><i class="fa-solid fa-paragraph"></i></span> 
+          <b>Summary:</b> {{ book.summary }}
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Explore more -->
+  <div class="explore-more">
+    <p class="title">Explore more books in this genre</p>
+    <div class="list-container">   
+        
+      {% if genre_books_list %}
+
+        {% for book in genre_books_list %}
+          <a href="{{ book.get_absolute_url }}" class="no-decoration">
+            <div class="list-item-container">
+
+              <img src="{{ book.cover.url }}" alt="book cover" class="center-img">
+
+              <p>
+                <span class="inline-icon"><i class="fa-solid fa-book"></i></span> 
+                {{ book.title }}
+              </p>
+              <p>
+                <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+                {{ book.author }}
+              </p>
+        
+              {% if book.is_available %}
+                <p>
+                  <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+                  {{ book.price }} &mdash; <span class="available">Available in stock</span>
+                </p>
+              {% else %}
+                <p class="not-available">Not available</p>
+              {% endif %}
+            
+            </div>
+          </a>
+        {% endfor %}
+
+      {% else %}
+        <p>There are no books in the shop.</p>
+
+      {% endif %}
+
+    </div>
+  </div>
+
+  {% if user.is_authenticated %}
+    <script>
+      function sayAdded() {
+        alert("Added to your Shopping Cart.");
+      }
+    </script>
+  {% endif%}
 
 {% endblock %}

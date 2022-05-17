@@ -2,30 +2,62 @@
 
 {% block content %}
 
-  <h1>Shopping Cart</h1>
+  <p class="title">Your <b>Shopping Cart</b></p>
+  <div class="list-container">
   
-  {% if shopping_cart %}
+    {% if shopping_cart %}
 
-    {% for book in shopping_cart.books.all %}
+      {% for book in shopping_cart.books.all %}
 
-      <img src="{{ book.cover.url }}" alt="book cover" style="width:100px">
+      <a href="{{ book.get_absolute_url }}" class="no-decoration">
+        <div class="list-item-container">
 
-      <p>Title: <a href="{{ book.get_absolute_url }}">{{ book.title }}</a><br>
-      Author: <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a><br>
-      Price: {{ book.price }}$<br>
-      <a href="{% url 'remove_from_shopping_cart' pk=book.id %}">Remove From Cart</a></p>
-      
-      <hr>
+          <img src="{{ book.cover.url }}" alt="book cover" class="center-img">
 
-    {% endfor %}
+          <p>
+            <span class="inline-icon"><i class="fa-solid fa-book"></i></span> 
+            {{ book.title }}
+          </p>
+          <p>
+            <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+            {{ book.author }}
+          </p>
+    
+          {% if book.is_available %}
+            <p>
+              <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+              {{ book.price }} &mdash; <span class="available">Available in stock</span>
+            </p>
+          {% else %}
+            <p class="not-available">Not available</p>
+          {% endif %}
 
-    <p>Total Price: {{ total_price }}$</p>
-    <p><a href="{% url 'successful_purchase' %}">Purchase</a></p>
+          <form action="{% url 'remove_from_shopping_cart' pk=book.id %}">
+            <input type="submit" value="Remove from Shopping Cart" class="remove-from-cart" onclick="sayRemoved()">
+          </form>
+        </div>
+      </a>
 
-  {% else %}
+      {% endfor %}
+
+    {% else %}
     <p>You didn't add any book in your Shopping Cart yet.</p>
     <p><a href="{% url 'books' %}">Add now</a></p>
 
-  {% endif %}
+    {% endif %}
+
+  </div>
+
+  <div class="purchase-bar">
+    <p class="book-number">Number of Books in Cart: <b>{{ number_of_books }}</b></p>
+    <p class="price">Total Price: <b>{{ total_price }} $</b></p>
+    <a class="button no-decoration" href="{% url 'successful_purchase' %}">Purchase</a>
+  </div>
+
+  <script>
+    function sayRemoved() {
+      alert("Removed from your Shopping Cart.");
+    }
+  </script>
 
 {% endblock %}

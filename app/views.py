@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
@@ -6,21 +5,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
 from .models import Book, Author, Genre, ShoppingCart
-
-
-def index(request):
-
-  num_books = Book.objects.all().count()
-  num_instances_available = Book.objects.filter(is_available__exact=True).count()
-  num_authors = Author.objects.count()
-
-  context = {
-    'num_books': num_books,
-    'num_instances_available': num_instances_available,
-    'num_authors': num_authors,
-  }
-
-  return render(request, 'index.html', context)
 
 
 class SearchResultsView(generic.ListView):
@@ -34,18 +18,41 @@ class SearchResultsView(generic.ListView):
 
 class BookListView(generic.ListView):
   model = Book
-  paginate_by = 9
+  paginate_by = 9  
 
-class BookDetailView(generic.DetailView):
-  model = Book
+# class BookDetailView(generic.DetailView):
+#   model = Book
+
+def bookDetail(request, pk):
+  book = Book.objects.get(pk=pk)
+  first_genre_id = book.genre.first().id
+  genre_books_list = Book.objects.filter(genre__pk=first_genre_id).select_related().exclude(pk=pk)
+  
+  context = {
+    'book': book,
+    'genre_books_list': genre_books_list,
+  }
+  
+  return render(request, 'app/book_detail.html', context)
 
 
 class AuthorListView(generic.ListView):
   model = Author
   paginate_by = 9
 
-class AuthorDetailView(generic.DetailView):
-  model = Author
+# class AuthorDetailView(generic.DetailView):
+#   model = Author
+
+def authorDetail(request, pk):
+  author = Author.objects.get(pk=pk)
+  author_books_list = Book.objects.filter(author__pk=pk).select_related()
+  
+  context = {
+    'author': author,
+    'author_books_list': author_books_list,
+  }
+  
+  return render(request, 'app/author_detail.html', context)
 
 
 class GenreListView(generic.ListView):
@@ -66,17 +73,24 @@ def genreBooks(request, pk):
 
 def showShoppingCart(request):
 
+  if not request.user.is_authenticated:
+    return redirect('books')
+
   shopping_cart = ShoppingCart.objects.get(user=request.user)
+  number_of_books = shopping_cart.books.all().count()
 
   context = {}
-  if shopping_cart.books.all().count() > 0:
+  if number_of_books > 0:
 
     total_price = 0
     for book in shopping_cart.books.all():
       total_price += int(book.price)
 
-    context['shopping_cart'] = shopping_cart
-    context['total_price'] = total_price
+    context = {
+      'shopping_cart': shopping_cart,
+      'number_of_books': number_of_books,
+      'total_price': total_price,
+    }
 
   return render(request, 'app/shopping_cart.html', context)
 
@@ -88,15 +102,18 @@ def addToShoppingCart(request, pk):
     context = { 'pk': pk }
     return render(request, 'app/login_first.html', context)
     
+  # Check if the User has a ShoppingCart instance
   try:
     shopping_cart = ShoppingCart.objects.get(user=request.user)
 
+  # If he/she hasn't
   except ShoppingCart.DoesNotExist:
     shopping_cart = ShoppingCart()
     shopping_cart.user = request.user
     shopping_cart.save()
     shopping_cart.books.add(book)
 
+  # If he/she has
   else:
     shopping_cart.books.add(book)
     
@@ -112,6 +129,12 @@ def removeFromShoppingCart(request, pk):
   return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def successfulPurchase(request):
+
+  shopping_cart = ShoppingCart.objects.get(user=request.user)
+
+  for book in shopping_cart.books.all():
+    shopping_cart.books.remove(book)
+
   return render(request, 'app/successful_purchase.html')
 
 
