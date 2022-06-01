@@ -1,10 +1,12 @@
+import imp
 from django.shortcuts import redirect, render
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from .models import Book, Author, Genre, ShoppingCart
+from .models import Book, Comment, Author, Genre, ShoppingCart
+from .forms import CommentForm
 
 
 class SearchResultsView(generic.ListView):
@@ -20,18 +22,56 @@ class BookListView(generic.ListView):
   model = Book
   paginate_by = 9  
 
-# class BookDetailView(generic.DetailView):
-#   model = Book
 
 def bookDetail(request, pk):
+
+  # Define context dictionary to be filled in the process
+  context = {}
+
+  # Get User model of the current user 
+  user = request.user
+
+  # Get the book detail and a list of all books in that genre
   book = Book.objects.get(pk=pk)
   first_genre_id = book.genre.first().id
   genre_books_list = Book.objects.filter(genre__pk=first_genre_id).select_related().exclude(pk=pk)
   
-  context = {
-    'book': book,
-    'genre_books_list': genre_books_list,
-  }
+  context['book'] = book
+  context['genre_books_list'] = genre_books_list
+
+  # If the request type is POST
+  if request.POST:
+
+    # Create the respective Form with a POST request
+    form = CommentForm(request.POST)
+
+    # Check if the form passed verifications
+    if form.is_valid():
+
+      # Create and save the Comment instance
+      Comment.objects.create(
+        user    = user,
+        book    = book,
+        score   = form.cleaned_data.get('score'),
+        recommend = form.cleaned_data.get('recommend'),
+        text = form.cleaned_data.get('text'),
+      )
+
+      # Redirect user to the TransactionDetail page
+      return redirect('book-detail', pk=book.id)
+
+    # If form wasn't valid, return unvalid form to be filled again
+    else:
+      context['comment_form'] = form
+
+  # If the request type is GET, create an empty form and pass it to template
+  else:
+    form = CommentForm()
+    context['comment_form'] = form
+
+  # Get all comments for this book
+  comments = Comment.objects.filter(book__pk=book.id).select_related().order_by('-date_time')
+  context['comments'] = comments
   
   return render(request, 'app/book_detail.html', context)
 
@@ -40,8 +80,6 @@ class AuthorListView(generic.ListView):
   model = Author
   paginate_by = 9
 
-# class AuthorDetailView(generic.DetailView):
-#   model = Author
 
 def authorDetail(request, pk):
   author = Author.objects.get(pk=pk)

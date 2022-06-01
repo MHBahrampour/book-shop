@@ -52,7 +52,7 @@
   </div>
 
   <!-- Explore more -->
-  <div class="explore-more">
+  <div class="section-wrapper">
     <p class="title">Explore more books in this genre</p>
     <div class="list-container">   
         
@@ -93,6 +93,85 @@
 
     </div>
   </div>
+
+  
+  <div class="section-wrapper">
+
+    <!-- Sending comment -->
+    <div class="comment-form">
+
+      <p class="title">Send a comment</p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% for field in comment_form %}
+          <div class="field-wrapper">
+
+            {{ field.errors }}
+
+            {% if field.type == radio %}
+
+              {{ field.label_tag }}
+              <div class="radio">
+                {{ field }}
+              </div>
+
+            {% else %}
+              {{ field.label_tag }} {{ field }}
+
+            {% endif %}
+          
+          </div>
+        {% endfor %}
+            
+        <input type="submit" value="Send"> 
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- Showing comments -->
+  <div class="section-wrapper">
+
+    <p class="title">Comments</p>
+
+    {% if comments %}
+
+      {% for comment in comments %}
+        <div class="comment-item">
+
+          <div class="header">
+            <p class="score 
+              {% if comment.score < '2.5' %} low
+              {% elif comment.score < '3.6' %} medium 
+              {% else %} good {% endif %}"><i class="fa-solid fa-star"></i> {{ comment.score }}
+            </p>
+            <p class="username"><i class="fa-solid fa-circle-user"></i> {{ comment.user.username }}</p>
+            <p class="date"><i class="fa-solid fa-calendar-check"></i> {{ comment.date_time.date }}</p>
+          </div>
+
+          <div class="text">
+            <p class="recommend 
+              {% if comment.recommend == 'I Dont Recommend It' %} no
+              {% elif comment.recommend == 'Not Sure To Recommend' %} not-sure 
+              {% else %} yes {% endif %}"><i class="fa-solid fa-comment-dots"></i> {{ comment.recommend }}
+            </p>
+            <p>{{ comment.text }}</p>
+          </div>
+          
+        </div>
+      {% endfor %}
+
+    {% else %}
+        <p>There are no comments for this book.</p>
+        
+    {% endif %}
+
+  </div>
+
 
   {% if user.is_authenticated %}
     <script>
