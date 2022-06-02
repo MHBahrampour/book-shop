@@ -24,5 +24,8 @@ urlpatterns = [
   path('genre/<int:pk>/', views.genreBooks, name='genre-books'),
 
   path("search/", views.SearchResultsView.as_view(), name="search"),
+
+  path("contact/", views.contact, name="contact"),
+  path("contact/successful", views.successfulContact, name="successful_contact"),
   
 ]

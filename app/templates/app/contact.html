@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Contact Us</title>{% endblock %}
+
+{% block content %}
+
+  <div class="contact-container">
+    
+    <!-- Contact Ways -->
+    <div class="contact-items-container">
+
+      <div class="contact-item">
+
+        <i class="fa-solid fa-phone-volume icon grid-center"></i>
+        
+        <div>
+          <p class="header">Call Us</p>
+          <p>021-57891547</p>
+        </div>
+        
+      </div>
+
+      <div class="contact-item">
+
+        <i class="fa-solid fa-envelope-circle-check icon grid-center"></i>
+        
+        <div>
+          <p class="header">Email Us</p>
+          <p>email@bookshop.ir</p>
+        </div>
+        
+      </div>
+
+      <div class="contact-item">
+
+        <i class="fa-solid fa-clock icon grid-center"></i>
+        
+        <div>
+          <p class="header">Working Hours</p>
+          <p>Regular Days: From 8:30 AM to 7 PM</p>
+          <p>Weekends: From 8:30 AM to 1 PM</p>
+        </div>
+        
+      </div>
+
+      <div class="contact-item">
+
+        <i class="fa-solid fa-map-location-dot icon grid-center"></i>
+        
+        <div>
+          <p class="header">Address</p>
+          <p>Tehran, Motahari St, Fake St, Plaque 15</p>
+        </div>
+        
+      </div>
+
+      <div class="contact-item">
+
+        <i class="fa-solid fa-location-arrow icon grid-center"></i>
+        
+        <div>
+          <p class="header">Send a ticket</p>
+          <p>Send a ticket through the next form to us</p>
+        </div>
+        
+      </div>
+
+    </div>
+
+    <!-- Contact Form -->
+    <div class="form">
+      <form method="post">
+        {% csrf_token %}
+  
+        {% for field in contact_form %}
+          <div class="field-wrapper">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+          </div>
+        {% endfor %}
+        <input type="submit" value="Send">
+  
+      </form>
+    </div>
+
+  </div>
+
+{% endblock %}

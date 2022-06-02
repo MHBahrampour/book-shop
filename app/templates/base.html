@@ -39,6 +39,7 @@
         
         <a href="{% url 'authors' %}" class="btn no-decoration {% if url_name == 'authors' %}active{% endif %}">Authors</a>
         <a href="{% url 'genres' %}" class="btn no-decoration {% if url_name == 'genres' %}active{% endif %}">Genres</a>
+        <a href="{% url 'contact' %}" class="btn no-decoration {% if url_name == 'contact' %}active{% endif %}">Contact</a>
         
         {% if user.is_authenticated %}
           <a href="{% url 'show_shopping_cart' %} "class="btn no-decoration {% if url_name == 'show_shopping_cart' %}active{% endif %}">Shopping Cart</a>

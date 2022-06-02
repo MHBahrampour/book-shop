@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import CharField
 from django.urls import reverse
 from django.conf import settings
 
@@ -112,6 +113,21 @@ class Comment(models.Model):
     """String for representing the Model object."""
     return self.user.username
 
-  def get_absolute_url(self):
-    """Returns the URL to access a list of books in a specific genre."""
-    return reverse('genre-books', args=[str(self.id)])
+
+class Contact(models.Model):
+
+  fullname      = models.CharField(max_length=150)
+
+  email         = models.EmailField(max_length=100)
+
+  phone_number  = models.CharField(max_length=11)
+
+  subject       = models.CharField(max_length=50)
+
+  message       = models.TextField(max_length=1000)
+
+  date_time     = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    """String for representing the Model object."""
+    return self.subject

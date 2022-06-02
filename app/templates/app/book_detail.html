@@ -95,13 +95,12 @@
   </div>
 
   
+  <!-- Sending a comment -->
   <div class="section-wrapper">
 
-    <!-- Sending comment -->
-    <div class="comment-form">
+    <p class="title">Send a comment</p>
 
-      <p class="title">Send a comment</p>
-
+    <div class="form no-shadow">
       <form method="post">
         {% csrf_token %}
 
@@ -128,7 +127,6 @@
         <input type="submit" value="Send"> 
 
       </form>
-
     </div>
 
   </div>
@@ -149,7 +147,7 @@
               {% elif comment.score < '3.6' %} medium 
               {% else %} good {% endif %}"><i class="fa-solid fa-star"></i> {{ comment.score }}
             </p>
-            <p class="username"><i class="fa-solid fa-circle-user"></i> {{ comment.user.username }}</p>
+            <p class="user"><i class="fa-solid fa-circle-user"></i> {{ comment.user.username }}</p>
             <p class="date"><i class="fa-solid fa-calendar-check"></i> {{ comment.date_time.date }}</p>
           </div>
 

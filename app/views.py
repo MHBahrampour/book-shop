@@ -5,8 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from .models import Book, Comment, Author, Genre, ShoppingCart
-from .forms import CommentForm
+from .models import Book, Author, Genre, ShoppingCart, Comment, Contact
+from .forms import CommentForm, ContactForm
 
 
 class SearchResultsView(generic.ListView):
@@ -176,6 +176,42 @@ def successfulPurchase(request):
   return render(request, 'app/successful_purchase.html')
 
 
+def contact(request):
+
+  # Define context dictionary to be filled in the process
+  context = {}
+
+  # If the request type is POST
+  if request.POST:
+
+    # Create the respective Form with a POST request
+    form = ContactForm(request.POST)
+
+    # Check if the form passed verifications
+    if form.is_valid():
+
+      # Save the form in database
+      form.save()
+
+      # Redirect user to the Successful Contact page
+      return redirect('successful_contact')
+
+    # If form wasn't valid, return unvalid form to be filled again
+    else:
+      context['contact_form'] = form
+
+  # If the request type is GET, create an empty form and pass it to template
+  else:
+    form = ContactForm()
+    context['contact_form'] = form
+  
+  return render(request, 'app/contact.html', context)
+
+def successfulContact(request):
+
+  return render(request, 'app/successful_contact.html')
+
+  
 class Signup(generic.CreateView):
   form_class = UserCreationForm
   success_url = reverse_lazy("login")
