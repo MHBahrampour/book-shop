@@ -9,32 +9,41 @@
 
       <img src="{{ book.cover.url }}" alt="Book Cover">
 
-      <div>
+      <div class="details">
+
         <h1><i class="fa-solid fa-book"></i> {{ book.title }}</h1>
 
+        {% if avg_score %}
+          <div class="stats">
+            <p><i class="fa-solid fa-star-half-stroke fa-fw"></i> {{ avg_score }} / 5  ({{ vote_count }} Vote{{ vote_count|pluralize }})</p>
+            <p><i class="fa-solid fa-thumbs-up fa-fw"></i> {{ do_recommend }}</p>
+            <p><i class="fa-solid fa-thumbs-down fa-fw"></i> {{ dont_recommend }}</p>
+          </div>
+        {% endif %}
+
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
-          <b>Author:</b> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a>
+          <i class="fa-solid fa-marker fa-fw"></i>
+          <b>Author:</b> <a href="{{ book.author.get_absolute_url }}" class="no-decoration">{{ book.author }}</a>
         </p>
 
         {% if book.genre.all.count > 1 %}
           <p>
-            <span class="inline-icon"><i class="fa-solid fa-swatchbook"></i></span> 
+            <i class="fa-solid fa-swatchbook fa-fw"></i>
             <b>Genres:</b> {{ book.genre.all|join:", " }}
           </p>
         {% else %}
           <p>
-            <span class="inline-icon"><i class="fa-solid fa-swatchbook"></i></span> 
+            <i class="fa-solid fa-swatchbook fa-fw"></i>
             <b>Genre:</b> {{ book.genre.all|join:", " }}
           </p>
         {% endif %}
       
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-arrow-down-1-9"></i></span> 
+          <i class="fa-solid fa-arrow-down-1-9 fa-fw"></i> 
           <b>ISBN:</b> {{ book.isbn }}
         </p>
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+          <i class="fa-solid fa-sack-dollar fa-fw"></i>
           <b>Price:</b> {{ book.price }}$
         </p>
 
@@ -43,13 +52,27 @@
         </form>
 
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-paragraph"></i></span> 
+          <i class="fa-solid fa-paragraph fa-fw"></i>
           <b>Summary:</b> {{ book.summary }}
         </p>
+
+        <!-- <div class="stats">
+          <p><i class="fa-solid fa-star-half-stroke fa-fw"></i> {{ avg_score }} / 5</p>
+          <p><i class="fa-solid fa-thumbs-up fa-fw"></i> {{ do_recommend }}</p>
+          <p><i class="fa-solid fa-thumbs-down fa-fw"></i> {{ dont_recommend }}</p>
+        </div> -->
+
       </div>
 
     </div>
   </div>
+
+  <!-- showing stats -->
+  <!-- <div class="book-stats">
+    <p>Average score: {{ avg_score }}</p>
+    <p>Number of people who <strong>recommend</strong> this book: {{ do_recommend }}</p>
+    <p>Number of people who <strong>don't recommend</strong> this book: {{ dont_recommend }}</p>
+  </div> -->
 
   <!-- Explore more -->
   <div class="section-wrapper">
@@ -65,17 +88,17 @@
               <img src="{{ book.cover.url }}" alt="book cover" class="center-img">
 
               <p>
-                <span class="inline-icon"><i class="fa-solid fa-book"></i></span> 
+                <i class="fa-solid fa-book fa-fw"></i>
                 {{ book.title }}
               </p>
               <p>
-                <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+                <i class="fa-solid fa-marker  fa-fw"></i>
                 {{ book.author }}
               </p>
         
               {% if book.is_available %}
                 <p>
-                  <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+                  <i class="fa-solid fa-sack-dollar  fa-fw"></i>
                   {{ book.price }} &mdash; <span class="available">Available in stock</span>
                 </p>
               {% else %}
@@ -94,13 +117,12 @@
     </div>
   </div>
 
-  
   <!-- Sending a comment -->
   <div class="section-wrapper grid-center">
 
     <p class="title">Send a comment</p>
 
-    <div class="form no-shadow">
+    <div class="form">
       <form method="post">
         {% csrf_token %}
 
@@ -132,8 +154,6 @@
   </div>
 
   <!-- Showing comments -->
-  
-
   <div class="section-wrapper">
 
     <p class="title">Comments</p>

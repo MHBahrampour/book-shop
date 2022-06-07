@@ -39,6 +39,34 @@ def bookDetail(request, pk):
   context['book'] = book
   context['genre_books_list'] = genre_books_list
 
+  # Get the stats of the book
+  book_comments = Comment.objects.filter(book__pk=pk).select_related()
+
+  scores = []
+  do_recommend = 0
+  dont_recommend = 0
+
+  if book_comments:
+
+    for comment in book_comments:
+
+      scores.append(comment.score)
+
+      if comment.recommend == 'I Recommend It':
+        do_recommend += 1
+
+      if comment.recommend == 'I Dont Recommend It':
+        dont_recommend += 1
+
+    scores = list( map(int, scores) )
+    avg_score = round( sum(scores) / len(scores), 1 )
+
+    context['avg_score'] = avg_score
+    context['vote_count'] = len(book_comments)
+    context['do_recommend'] = do_recommend
+    context['dont_recommend'] = dont_recommend
+
+
   # If the request type is POST
   if request.POST:
 

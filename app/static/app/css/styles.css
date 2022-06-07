@@ -6,13 +6,15 @@
 
       3 BASE CONTAINERS
 
-      4 NAVBAR
+      4 HOME PAGE
 
-      5 BOOK/AUTHOR/GENRE LIST
+      5 NAVBAR
 
-      6 BOOK/AUTHOR DETAIL
+      6 BOOK/AUTHOR/GENRE LIST
 
-      7 SHOPPING CART
+      7 BOOK/AUTHOR DETAIL
+
+      8 SHOPPING CART
 
       8 REGISTERATION
 
@@ -33,10 +35,12 @@
 /* -- 1.2 Root -- */
 :root {
   --white: #ffffff;
-  --text: #1c1f35; /* Space Codat */
-  --nav-bar: #97d3d6;
-  --nav-active: #2196F3;
-  --nav-hover: #ffffff;
+  --black: #1c1f35; /* Space Codat */
+
+  --blue: #2196f3;
+  --light-blue: #f3feff;
+  
+  --apricot: #FDE8DA;
 
   --search-bar-radius: 1rem;
   --lr-edges-padding: 1rem;
@@ -58,7 +62,7 @@ body {
 
   line-height: 1.7;
 
-  color: var(--text);
+  color: var(--black);
 }
 
 input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
@@ -90,7 +94,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 /* No decoratioin for links */
 .no-decoration {
   text-decoration: none;
-  color: var(--text);
+  color: var(--black);
 }
 
 /* A wrapper for icons */
@@ -139,11 +143,26 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 }
 
 
-/* -- 4 NAVBAR -- */
+/* == 4 HEADER */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  gap: 2rem;
+
+  margin-bottom: 1rem;
+}
+
+.stats p:nth-child(1) i { color: #f5a925; }
+.stats p:nth-child(2) i { color: #006d77; }
+.stats p:nth-child(3) i { color: #ef233c; }
+
+
+/* == 5 NAVBAR */
 .topnav {
   overflow: hidden;
-  background-color: var(--nav-bar);
-  z-index: 9999;
+  background-color: var(--white);
+  z-index: 1;
+  border-bottom: 3px solid var(--blue);
 }
 
 .topnav a {
@@ -151,7 +170,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
   display: block;
 
   text-align: center;
-  padding: var(--tb-edges-padding) var(--lr-edges-padding);
+  padding: 0.8rem 1rem;
   
   font-size: var(--nav-fs);
   font-weight: 500;
@@ -160,44 +179,51 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 }
 
 .topnav a.active {
-  background-color: var(--nav-active);
-  color: var(--white);
+  /* background-color: var(--light-blue); */
+  color: var(--blue);
+  outline: none;
 }
 
 .topnav .search-container {
   float: right;
-  margin-right: var(--lr-edges-padding);
+  margin-right: 1rem;
 }
 
 .topnav .search-container input[type=text] {
-  width: 80px;
+  width: 100px;
   padding: 0.5rem 4rem 0.5rem 1rem;
 
   font-size: var(--nav-fs);
   border-radius: var(--search-bar-radius);
+  outline: 1px solid var(--blue);
+
+  background-color: var(--light-blue);
 
   transition: width 0.5s ease;
 }
 
 .topnav .search-container input[type=text]::placeholder {
-  color: var(--nav-active);
+  color: var(--blue);
   text-decoration-line: underline;
   text-decoration-thickness: 2.5px;
 }
 
 .topnav .search-container input[type=text]:focus {
   width: 300px;
-  outline: var(--nav-active) solid 2px;
+  outline: 2px solid var(--blue);
 }
 
 .topnav .search-container button {
   position: relative;
   float: right;
+
   margin-left: -37.5px;
   width: 37.5px;
-
   padding: 0.5rem;
-  background-color: var(--white);
+
+  background-color: transparent;
+  color: var(--blue);
+  
   cursor: pointer;
   
   font-size: var(--nav-fs);
@@ -236,6 +262,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 .list-item-container img { 
   height: 200px;
   margin-bottom: 0.5rem;
+  border-radius: 1rem;
 }
 
 .list-item-container .not-available {
@@ -252,6 +279,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
   display: grid;
   grid-template-columns: min-content 1fr;
   grid-template-rows: min-content;
+  gap: 2rem;
 }
 
 .detail-item-container img { 
@@ -260,12 +288,13 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
   transition: all 0.5s ease-in-out;
 }
 
-.detail-item-container div {
+.detail-item-container .details {
   box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.1);
   border-radius: 2rem;
   padding: 2rem;
-  margin-left: 2rem;
 }
+
+.detail-item-container a { color: var(--blue); }
 
 .explore-more {
   margin: 2rem 1rem;
@@ -340,7 +369,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 .form input:focus,
 .form textarea:focus,
 .form select:focus {
-  outline: 2px solid var(--nav-active);
+  outline: 2px solid var(--blue);
 }
 
 .form textarea { height: 7rem; }
@@ -384,7 +413,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 
 .comment-item .header .user,
 .comment-item .header .date {
-  border: 1px solid var(--text);
+  border: 1px solid var(--black);
 }
 
 .comment-item .text { padding: 1rem 1rem 0rem 2rem; }
@@ -392,14 +421,14 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 /* Style for different scores */
 .comment-item .header .score { color: var(--white); }
 
-.comment-item .header .score.low    { background-color: red; }
-.comment-item .header .score.medium { background-color: gray; }
-.comment-item .header .score.good   { background-color: green; }
+.comment-item .header .score.low    { background-color: #ef233c; }
+.comment-item .header .score.medium { background-color: #8e9aaf; }
+.comment-item .header .score.good   { background-color: #006d77; }
 
 /* Style for different recomendations */
-.comment-item .text .recommend.no       { color: red; }
-.comment-item .text .recommend.not-sure { color: gray; }
-.comment-item .text .recommend.yes      { color: green; }
+.comment-item .text .recommend.no       { color: #ef233c; }
+.comment-item .text .recommend.not-sure { color: #8e9aaf; }
+.comment-item .text .recommend.yes      { color: #006d77; }
 
 .comment-item .header .user { text-transform: uppercase; }
 
@@ -432,14 +461,62 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 .contact-item .header { font-weight: bold; }
 
 
+.footer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'item1 item2 item3'
+    'item4 item4 item4';
+  grid-template-rows: min-content;
+  gap: 1rem;
+  padding: 3rem;
+  
+  background-color: #f3feff;
+  border-top: 0.3rem solid #2196f3;
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(243,254,255,1) 100%);
+  color: var(--black);
+  margin-top: 8rem;
+}
+
+.footer div > p:first-child {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.footer a { 
+  text-decoration: none;
+  color: var(--black);
+}
+
+.footer .social-media {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem;
+
+  font-size: 1.2em;
+  width: min-content;
+}
+
+.footer .copy-right {
+  grid-area: item4;
+
+  text-align: center;
+  background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(33,150,243,1) 15%, rgba(33,150,243,1) 85%, rgb(255, 255, 255) 100%);
+  color: var(--white);
+  margin-top: 2rem;
+}
+
+
 /* == 9 MEDIA QUERIES */
 
-/* -- 9.1 DESKTOP VERSION */
+/* -- 9.1 MOBILE VERSION */
 @media screen and (max-width: 600px) {
 
   .topnav a {
     clear: right;
+    margin: 0;
   }
+
   .topnav a:not(:first-child) {
     display: none;
   }
@@ -454,8 +531,8 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
 
   .topnav.responsive .icon {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 0rem;
+    top: 0rem;
   }
   .topnav.responsive a {
     float: none;
@@ -473,7 +550,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
   .topnav .search-container input[type=text],
   .topnav .search-container button {
     border-radius: 0px;
-    padding: 0.80rem;
+    padding: 1.15rem;
   }
 
   .topnav .search-container input[type=text] {
@@ -487,7 +564,7 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
     margin: 1rem auto;
   }
 
-  .detail-item-container div {
+  .detail-item-container .details {
     margin: 0;
   }
 
@@ -521,24 +598,33 @@ input, select { font-size: clamp(1.4rem, 1.2rem + 0.25vw, 1.8rem); }
   .contact-container {
     grid-template-columns: 1fr;
   }
+
+  .footer {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'item1' 'item2' 'item3' 'item4';
+  }
 }
 
 /* -- 9.1 HOVERS */
 @media (hover: hover) {
 
   .topnav a:hover {
-    background-color: var(--nav-hover);
-    color: var(--text);
+    letter-spacing: 0.1em;
   }
 
   .topnav .search-container button:hover {
-    background-color: var(--nav-active);
+    background-color: var(--blue);
     color: var(--white);
   }
 
   .list-item-container:hover { background-color: #f3feff; }
 
   .detail-item-container img:is(:hover) { filter: grayscale(100%); }
+
+  .detail-item-container a:hover,
+  .footer a:hover {
+    text-decoration: underline; text-decoration-thickness: 0.1rem;
+  }
 
   .add-to-cart:hover {
     background-color: rgb(145, 194, 240);

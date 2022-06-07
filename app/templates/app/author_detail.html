@@ -10,20 +10,20 @@
       <img src="{{ author.portrait.url }}" alt="Author Portrait">
 
       <div> 
-        <h1><i class="fa-solid fa-user"></i> {{ author }}</h1>
+        <h1><i class="fa-solid fa-user fa-fw"></i> {{ author }}</h1>
         
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-cake-candles"></i></span> 
+          <i class="fa-solid fa-cake-candles fa-fw"></i> 
           <b>Born in:</b> {{ author.date_of_birth }}</a>
         </p>
 
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-skull"></i></i></span> 
+          <i class="fa-solid fa-skull fa-fw"></i>
           <b>Died in:</b> {{ author.date_of_death }}</a>
         </p>
 
         <p>
-          <span class="inline-icon"><i class="fa-solid fa-paragraph"></i></span> 
+          <i class="fa-solid fa-paragraph fa-fw"></i> 
           <b>Biography:</b> {{ author.biography }}
         </p>
       </div>
@@ -46,17 +46,17 @@
               <img src="{{ book.cover.url }}" alt="book cover" class="center-img">
 
               <p>
-                <span class="inline-icon"><i class="fa-solid fa-book"></i></span> 
+                <i class="fa-solid fa-book fa-fw"></i> 
                 {{ book.title }}
               </p>
               <p>
-                <span class="inline-icon"><i class="fa-solid fa-marker"></i></span> 
+                <i class="fa-solid fa-marker fa-fw"></i> 
                 {{ book.author }}
               </p>
         
               {% if book.is_available %}
                 <p>
-                  <span class="inline-icon"><i class="fa-solid fa-sack-dollar"></i></span> 
+                  <i class="fa-solid fa-sack-dollar fa-fw"></i> 
                   {{ book.price }} &mdash; <span class="available">Available in stock</span>
                 </p>
               {% else %}
