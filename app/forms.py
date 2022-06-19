@@ -34,3 +34,15 @@ class ContactForm(forms.ModelForm):
   class Meta:
     model   = Contact
     fields  = ('fullname', 'email', 'phone_number', 'subject', 'message')
+
+  def clean_phone_number(self):
+    
+    phone_number = self.cleaned_data['phone_number']
+
+    # Check that the phone_number is only containg digits
+    try:
+      int(phone_number)
+    except ValueError:
+      raise forms.ValidationError("Phone number should be contain only digits.")
+
+    return phone_number

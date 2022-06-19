@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from .models import Book, Author, Genre, ShoppingCart, Comment, Contact
+from .models import Book, Author, Genre, ShoppingCart, Comment
 from .forms import CommentForm, ContactForm
 
 
@@ -50,7 +50,7 @@ def bookDetail(request, pk):
 
     for comment in book_comments:
 
-      scores.append(comment.score)
+      scores.append( int(comment.score) )
 
       if comment.recommend == 'I Recommend It':
         do_recommend += 1
@@ -58,7 +58,6 @@ def bookDetail(request, pk):
       if comment.recommend == 'I Dont Recommend It':
         dont_recommend += 1
 
-    scores = list( map(int, scores) )
     avg_score = round( sum(scores) / len(scores), 1 )
 
     context['avg_score'] = avg_score
@@ -86,7 +85,7 @@ def bookDetail(request, pk):
       )
 
       # Redirect user to the TransactionDetail page
-      return redirect('book-detail', pk=book.id)
+      return redirect('book-detail', pk=pk)
 
     # If form wasn't valid, return unvalid form to be filled again
     else:
@@ -98,7 +97,7 @@ def bookDetail(request, pk):
     context['comment_form'] = form
 
   # Get all comments for this book
-  comments = Comment.objects.filter(book__pk=book.id).select_related().order_by('-date_time')
+  comments = Comment.objects.filter(book__pk=pk).select_related().order_by('-date_time')
   context['comments'] = comments
   
   return render(request, 'app/book_detail.html', context)

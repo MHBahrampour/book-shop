@@ -3,76 +3,53 @@
 {% block content %}
 
   <!-- Detail of the Book -->
-  <div class="detail-container">
-    
-    <div class="detail-item-container">
+  <div class="detail-item-container">
 
-      <img src="{{ book.cover.url }}" alt="Book Cover">
+    <img src="{{ book.cover.url }}" alt="Book Cover">
 
-      <div class="details">
+    <div class="details">
 
-        <h1><i class="fa-solid fa-book"></i> {{ book.title }}</h1>
+      <h1><i class="fa-solid fa-book"></i> {{ book.title }}</h1>
 
-        {% if avg_score %}
-          <div class="stats">
-            <p><i class="fa-solid fa-star-half-stroke fa-fw"></i> {{ avg_score }} / 5  ({{ vote_count }} Vote{{ vote_count|pluralize }})</p>
-            <p><i class="fa-solid fa-thumbs-up fa-fw"></i> {{ do_recommend }}</p>
-            <p><i class="fa-solid fa-thumbs-down fa-fw"></i> {{ dont_recommend }}</p>
-          </div>
-        {% endif %}
-
-        <p>
-          <i class="fa-solid fa-marker fa-fw"></i>
-          <b>Author:</b> <a href="{{ book.author.get_absolute_url }}" class="no-decoration">{{ book.author }}</a>
-        </p>
-
-        {% if book.genre.all.count > 1 %}
-          <p>
-            <i class="fa-solid fa-swatchbook fa-fw"></i>
-            <b>Genres:</b> {{ book.genre.all|join:", " }}
-          </p>
-        {% else %}
-          <p>
-            <i class="fa-solid fa-swatchbook fa-fw"></i>
-            <b>Genre:</b> {{ book.genre.all|join:", " }}
-          </p>
-        {% endif %}
-      
-        <p>
-          <i class="fa-solid fa-arrow-down-1-9 fa-fw"></i> 
-          <b>ISBN:</b> {{ book.isbn }}
-        </p>
-        <p>
-          <i class="fa-solid fa-sack-dollar fa-fw"></i>
-          <b>Price:</b> {{ book.price }}$
-        </p>
-
-        <form action="{% url 'add_to_shopping_cart' pk=book.id %}">
-          <input type="submit" value="Add to Shopping Cart" class="add-to-cart" onclick="sayAdded()">
-        </form>
-
-        <p>
-          <i class="fa-solid fa-paragraph fa-fw"></i>
-          <b>Summary:</b> {{ book.summary }}
-        </p>
-
-        <!-- <div class="stats">
-          <p><i class="fa-solid fa-star-half-stroke fa-fw"></i> {{ avg_score }} / 5</p>
+      {% if avg_score %}
+        <div class="stats">
+          <p><i class="fa-solid fa-star-half-stroke fa-fw"></i> {{ avg_score }} / 5 ({{ vote_count }} Vote{{ vote_count|pluralize }})</p>
           <p><i class="fa-solid fa-thumbs-up fa-fw"></i> {{ do_recommend }}</p>
           <p><i class="fa-solid fa-thumbs-down fa-fw"></i> {{ dont_recommend }}</p>
-        </div> -->
+        </div>
+      {% endif %}
 
-      </div>
+      <p>
+        <i class="fa-solid fa-marker fa-fw"></i>
+        <b>Author:</b> <a href="{{ book.author.get_absolute_url }}" class="no-decoration">{{ book.author }}</a>
+      </p>
+
+      <p>
+        <i class="fa-solid fa-swatchbook fa-fw"></i>
+        <b>Genre{{ book.genre.all.count|pluralize }}:</b> {{ book.genre.all|join:", " }}
+      </p>
+    
+      <p>
+        <i class="fa-solid fa-arrow-down-1-9 fa-fw"></i> 
+        <b>ISBN:</b> {{ book.isbn }}
+      </p>
+      <p>
+        <i class="fa-solid fa-sack-dollar fa-fw"></i>
+        <b>Price:</b> {{ book.price }}$
+      </p>
+
+      <form action="{% url 'add_to_shopping_cart' pk=book.id %}">
+        <input type="submit" value="Add to Cart" class="add-to-cart" onclick="sayAdded()">
+      </form>
+
+      <p>
+        <i class="fa-solid fa-paragraph fa-fw"></i>
+        <b>Summary:</b> {{ book.summary }}
+      </p>
 
     </div>
-  </div>
 
-  <!-- showing stats -->
-  <!-- <div class="book-stats">
-    <p>Average score: {{ avg_score }}</p>
-    <p>Number of people who <strong>recommend</strong> this book: {{ do_recommend }}</p>
-    <p>Number of people who <strong>don't recommend</strong> this book: {{ dont_recommend }}</p>
-  </div> -->
+  </div>
 
   <!-- Explore more -->
   <div class="section-wrapper">
@@ -128,21 +105,8 @@
 
         {% for field in comment_form %}
           <div class="field-wrapper">
-
             {{ field.errors }}
-
-            {% if field.type == radio %}
-
-              {{ field.label_tag }}
-              <div class="radio">
-                {{ field }}
-              </div>
-
-            {% else %}
-              {{ field.label_tag }} {{ field }}
-
-            {% endif %}
-          
+            {{ field.label_tag }} {{ field }}
           </div>
         {% endfor %}
             
@@ -167,19 +131,21 @@
 
             <div class="header">
               <p class="score 
-                {% if comment.score < '2.5' %} low
-                {% elif comment.score < '3.6' %} medium 
-                {% else %} good {% endif %}"><i class="fa-solid fa-star"></i> {{ comment.score }}
+                {% if comment.score == '1' or comment.score == '2' %} low
+                {% elif comment.score == '3' %} medium 
+                {% else %} good {% endif %}">
+                <i class="fa-solid fa-star"></i> {{ comment.score }}
               </p>
               <p class="user"><i class="fa-solid fa-circle-user"></i> {{ comment.user.username }}</p>
               <p class="date"><i class="fa-solid fa-calendar-check"></i> {{ comment.date_time.date }}</p>
             </div>
 
             <div class="text">
-              <p class="recommend 
-                {% if comment.recommend == 'I Dont Recommend It' %} no
-                {% elif comment.recommend == 'Not Sure To Recommend' %} not-sure 
-                {% else %} yes {% endif %}"><i class="fa-solid fa-comment-dots"></i> {{ comment.recommend }}
+              <p class=" 
+                {% if comment.recommend == 'I Dont Recommend It' %} not-recommended
+                {% elif comment.recommend == 'Not Sure To Recommend' %} ns-recommended 
+                {% else %} recommended {% endif %}">
+                <i class="fa-solid fa-comment-dots"></i> {{ comment.recommend }}
               </p>
               <p>{{ comment.text }}</p>
             </div>
@@ -195,7 +161,6 @@
     {% endif %}
 
   </div>
-
 
   {% if user.is_authenticated %}
     <script>

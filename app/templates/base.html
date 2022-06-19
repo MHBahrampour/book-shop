@@ -25,7 +25,6 @@
   <nav class="topnav sticky" id="topNav">
     {% block sidebar %}
       
-        
         <!-- Higligth/Active current page nav bar button -->
         {% with url_name=request.resolver_match.url_name %}
 
@@ -95,22 +94,22 @@
 
     <div>
       <p>Contact Us:</p>
-      <p><i class="fa-solid fa-envelope-open-text"></i> Email: mail@bookshop.ir</p>
-      <p><i class="fa-solid fa-building-columns"></i> Office Phone: 021-23345801</p>
-      <p><i class="fa-solid fa-link"></i> <a href="{% url 'contact' %}">Go to Contact page</a></p>
+      <p><i class="fa-solid fa-envelope-circle-check fa-fw"></i> Email: mail@bookshop.ir</p>
+      <p><i class="fa-solid fa-building-columns fa-fw"></i> Office Phone: 021-23345801</p>
+      <p><i class="fa-solid fa-link fa-fw"></i> <a href="{% url 'contact' %}">Go to Contact page</a></p>
     </div>
 
     <div>
       <p>Useful links:</p>
-      <p><i class="fa-solid fa-link"></i> <a href="">How to order</a></p>
-      <p><i class="fa-solid fa-link"></i> <a href="">Terms of sending the order</a></p>
-      <p><i class="fa-solid fa-link"></i> <a href="">Payment method</a></p>
-      <p><i class="fa-solid fa-link"></i> <a href="">Frequently Asked Questions</a></p>
+      <p><i class="fa-solid fa-link fa-fw"></i> <a href="">How to order</a></p>
+      <p><i class="fa-solid fa-link fa-fw"></i> <a href="">Terms of sending the order</a></p>
+      <p><i class="fa-solid fa-link fa-fw"></i> <a href="">Payment method</a></p>
+      <p><i class="fa-solid fa-link fa-fw"></i> <a href="">Frequently Asked Questions</a></p>
     </div>
 
     <div>
       <p>Social Networks:</p>
-      <div class="social-media">
+      <div class="social-network">
         <i class="fa-brands fa-telegram fa-fw"></i>
         <i class="fa-brands fa-whatsapp fa-fw"></i>
         <i class="fa-brands fa-instagram fa-fw"></i>
@@ -126,19 +125,15 @@
 <script>
   // Nav bar for mobiles
   const dropDownNav = document.querySelector("#dropDownNav");
-  dropDownNav.addEventListener('click', function() {
-    const topNav = document.querySelector("#topNav");
-    topNav.classList.toggle("responsive");
 
+  dropDownNav.addEventListener('click', function() {
+
+    const topNav = document.querySelector("#topNav");
     const searchContainer = document.querySelector("#searchContainer");
     const icon = document.querySelector("#icon");
-    if ( getComputedStyle(searchContainer).display == "none" ) {
-      searchContainer.style.display = "block";
-      searchContainer.classList.remove("center-vertically");
-      icon.classList.add("fa-rotate-180");
-    } else {
-      searchContainer.style.display = "none";
-      icon.classList.remove("fa-rotate-180");
-    }
+
+    topNav.classList.toggle("responsive");
+    searchContainer.classList.toggle("center-vertically");
+    icon.classList.toggle("fa-rotate-180");
   });
 </script>
