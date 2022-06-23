@@ -22,7 +22,6 @@ class BookListView(generic.ListView):
   model = Book
   paginate_by = 9  
 
-
 def bookDetail(request, pk):
 
   # Define context dictionary to be filled in the process
@@ -106,7 +105,6 @@ def bookDetail(request, pk):
 class AuthorListView(generic.ListView):
   model = Author
   paginate_by = 9
-
 
 def authorDetail(request, pk):
   author = Author.objects.get(pk=pk)
